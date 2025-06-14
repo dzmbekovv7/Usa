@@ -10,7 +10,7 @@ const navItems = [
   { name: "Privacy", icon: Info, path: "/privacy" },
   { name: "Contact", icon: MessageCircle, path: "/contact" },
   { name: "About", icon: Info, path: "/about" },
-  { name: "FAQ", icon: HelpCircle, path: "/faq" },
+
 ];
 
 const Header = () => {
