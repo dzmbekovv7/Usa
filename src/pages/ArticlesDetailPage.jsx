@@ -22,8 +22,10 @@ const AshleyArticleDetailPage = () => {
 
   useEffect(() => {
     const fetchArticle = async () => {
-      const { data, error } = await supabase.from('dogstraining_articles').select('*');
-
+      const { data, error } = await supabase.from('greusa_articles').select('*');
+   data.forEach((article, index) => {
+        console.log(`Article ${index + 1} type:`, article.type);
+      });
       if (!error && data) {
         const found = data.find((a) => slugify(a.title) === slug);
         if (found) {
@@ -74,7 +76,7 @@ const AshleyArticleDetailPage = () => {
       : [newComment];
 
     const { error } = await supabase
-      .from('dogstraining_articles')
+      .from('greusa_articles')
       .update({ comments: updatedComments })
       .eq('id', article.id);
 
@@ -86,10 +88,10 @@ const AshleyArticleDetailPage = () => {
   };
 
   const keywords = [
-    'Skin Disorders',
-    'Makeup Tips',
-    'Beauty Lifestyle',
-    'Mens Grooming',
+    'Tools and tips',
+    'Finance and life in the USA',
+    'Immigration visas and law',
+    'Studying and testing',
   ];
 
   if (loading) return <Loading />;
@@ -163,22 +165,41 @@ console.log(article.content)
             dangerouslySetInnerHTML={{ __html: customMarkdown(article.content) }}
           />
           {/* Navigation */}
-          <div className="flex justify-between items-center mt-12 text-blue-500">
-            {prevArticle ? (
-              <Link to={`/articles/${prevArticle.slug}`} className="hover:underline">
-                ← {prevArticle.title}
-              </Link>
-            ) : (
-              <span />
-            )}
-            {nextArticle ? (
-              <Link to={`/articles/${nextArticle.slug}`} className="hover:underline">
-                {nextArticle.title} →
-              </Link>
-            ) : (
-              <span />
-            )}
-          </div>
+  <div className="flex justify-between mt-12 mb-12">
+  {prevArticle ? (
+    <button
+      onClick={() => navigate(`/articles/${slugify(prevArticle.title)}`)}
+      className="flex items-center gap-3 px-5 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition max-w-[45%] shadow-lg"
+    >
+      <span className="text-xl font-bold">←</span>
+      <div className="text-left truncate">
+        <div className="font-semibold">{prevArticle.title.length > 30 ? prevArticle.title.slice(0, 30) + '...' : prevArticle.title}</div>
+        <div className="text-xs opacity-80">{prevArticle.author}</div>
+        <div className="text-xs opacity-70">{new Date(prevArticle.published_date).toLocaleDateString()}</div>
+        <div className="text-xs italic text-gray-200 truncate max-w-full mt-1">
+          {prevArticle.content ? prevArticle.content.slice(0, 60).replace(/\n/g, ' ') + '...' : ''}
+        </div>
+      </div>
+    </button>
+  ) : <div />}
+
+  {nextArticle ? (
+    <button
+      onClick={() => navigate(`/articles/${slugify(nextArticle.title)}`)}
+      className="flex items-center gap-3 px-5 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition max-w-[45%] shadow-lg"
+    >
+      <div className="text-right truncate">
+        <div className="font-semibold">{nextArticle.title.length > 30 ? nextArticle.title.slice(0, 30) + '...' : nextArticle.title}</div>
+        <div className="text-xs opacity-80">{nextArticle.author}</div>
+        <div className="text-xs opacity-70">{new Date(nextArticle.published_date).toLocaleDateString()}</div>
+        <div className="text-xs italic text-gray-200 truncate max-w-full mt-1">
+          {nextArticle.content ? nextArticle.content.slice(0, 60).replace(/\n/g, ' ') + '...' : ''}
+        </div>
+      </div>
+      <span className="text-xl font-bold">→</span>
+    </button>
+  ) : <div />}
+</div>
         </main>
 
         {/* Sidebar */}
@@ -188,7 +209,7 @@ console.log(article.content)
             <ul className="space-y-3">
               {recentArticles.map((item) => (
                 <li key={item.id}>
-                  <Link to={`/articles/${item.slug}`} className="block hover:text-blue-500">
+                  <Link to={`/articles/${slugify(item.title)}`}className="block hover:text-blue-500">
                     <h4 className="font-medium">{item.title}</h4>
                     <time className="text-xs text-blue-600">
                       {new Date(item.published_date).toLocaleDateString()}
@@ -204,7 +225,7 @@ console.log(article.content)
             <ul className="space-y-3">
               {lastUpdatedArticles.map((item) => (
                 <li key={item.id}>
-                  <Link to={`/articles/${item.slug}`} className="block hover:text-blue-500">
+                  <Link   to={`/articles/${slugify(item.title)}`} className="block hover:text-blue-500">
                     <h4 className="font-medium">{item.title}</h4>
                     <time className="text-xs text-blue-600">
                       {new Date(item.updated_at || item.published_date).toLocaleDateString()}

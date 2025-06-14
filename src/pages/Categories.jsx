@@ -67,7 +67,7 @@ const Categories = () => {
   useEffect(() => {
     async function fetchArticles() {
       const { data } = await supabase
-        .from("makeup_articles")
+        .from("greusa_articles")
         .select("*")
         .order("published_date", { ascending: false })
         .limit(6);
@@ -115,7 +115,7 @@ const Categories = () => {
                     {article.summary}
                   </p>
                   <div className="mt-auto text-sm text-[#A57C55] flex justify-between items-center">
-                    <span>🕒 {article.reading_time} min</span>
+                    <span>🕒 {article.reading_time} </span>
                     <span>
                       📅 {new Date(article.published_date).toLocaleDateString()}
                     </span>

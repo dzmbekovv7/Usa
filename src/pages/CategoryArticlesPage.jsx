@@ -12,7 +12,7 @@ const CategoryArticlesPage = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       const { data, error } = await supabase
-        .from("makeup_articles")
+        .from("greusa_articles")
         .select("*")
         .eq("type", typename)
         .order("published_date", { ascending: false });

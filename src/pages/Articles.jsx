@@ -14,7 +14,7 @@ const DogsTrainingPage = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       const { data, error } = await supabase
-        .from('dogstraining_articles')
+        .from('greusa_articles')
         .select("*")
         .order("published_date", { ascending: false });
 
